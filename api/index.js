@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config()
 
+//database connection
 mongoose.connect(process.env.MONGO_URI).then(
     () => {
         console.log("Connected to Database")
@@ -12,6 +13,8 @@ mongoose.connect(process.env.MONGO_URI).then(
 .catch((err)=>{
     console.log(err)
 })
+
+
 const app = express();
 
 app.listen(3000, () => {
