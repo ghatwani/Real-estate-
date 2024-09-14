@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 const Header = () => {
     const { currentUser } = useSelector(state => state.user)
-    console.log(currentUser.avatar)
+    // console.log(currentUser.avatar)
     return (
         <header className='bg-slate-200 shadow-md p-3'>
             <div className='flex justify-between items-center max-w-6xl mx-auto'>
