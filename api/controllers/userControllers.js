@@ -31,3 +31,14 @@ export const updateUser=async(req, res, next)=>{
         next(error)
     }
 }
+
+export const deleteUser= async(req, res, next)=>{
+    if(req.user.id !== req.params.id) return next(errorHandler(401, "You can only access your own account!"))
+    try {
+        await User.findByIdAndDelete(req.user.id)
+        res.clearCookie('access_token_real_estate')
+        res.status(200).json('User has been deleted')
+    } catch (error) {
+        next(error)
+    }
+}
