@@ -127,7 +127,7 @@ const Profile = () => {
       dispatch(signoutUserSuccess(data))
       dispatch()
     } catch (error) {
-      dispatch(signoutUserFaliure(data.message))
+      dispatch(signoutUserFaliure(error.message))
     }
   }
   
