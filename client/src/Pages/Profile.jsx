@@ -26,13 +26,15 @@ const Profile = () => {
 
   const fileRef = useRef(null);
 
-  const { currentUser, loading ,error  } = useSelector((state) => state.user);
+  const { currentUser, loading, error } = useSelector((state) => state.user);
 
   const [file, setfile] = useState(undefined);
   const [filePerc, setfilePerc] = useState(0);
   const [fileUploadError, setfileUploadError] = useState(false);
   const [formData, setformData] = useState({});
-  const [updateSuccess, setupdateSuccess] = useState(false)
+  const [updateSuccess, setupdateSuccess] = useState(false);
+  const [listingError, setlistingError] = useState(false);
+  const [showUserListing, setshowUserListing] = useState([]);
 
   // console.log(filePerc)
   // console.log(fileUploadError)
@@ -97,40 +99,56 @@ const Profile = () => {
     }
   };
 
-  const handleDeleteUser=async() => {
+  const handleDeleteUser = async () => {
     try {
-      dispatch(deleteUserStart())
-      const res= await fetch(`/api/user/delete/${currentUser._id}`, {
-        method:'DELETE',
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
       });
-      const data= await res.json();
-      if(data.success===false){
+      const data = await res.json();
+      if (data.success === false) {
         dispatch(deleteUserFaliure(data.message));
         return;
       }
-      dispatch(deleteUserSuccess(data))
-      
+      dispatch(deleteUserSuccess(data));
     } catch (error) {
-      dispatch(deleteUserFaliure(error.message))
+      dispatch(deleteUserFaliure(error.message));
     }
-  }
-  
-  const handleSignOut=async() => {
+  };
+
+  const handleSignOut = async () => {
     try {
-      dispatch(signoutUserStart())
-      const res= await fetch('/api/auth/sign-out')
-      const data = await res.json()
-      if(data.success===false){
-        dispatch(signoutUserFaliure(data.message))
+      dispatch(signoutUserStart());
+      const res = await fetch("/api/auth/sign-out");
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(signoutUserFaliure(data.message));
         return;
       }
-      dispatch(signoutUserSuccess(data))
-      dispatch()
+      dispatch(signoutUserSuccess(data));
+      dispatch();
     } catch (error) {
-      dispatch(signoutUserFaliure(error.message))
+      dispatch(signoutUserFaliure(error.message));
     }
-  }
-  
+  };
+  const handleShowListing = async () => {
+    try {
+      setlistingError(false);
+      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+      const data = await res.json();
+      console.log(data);
+
+      if (data.success === false) {
+        setlistingError(true);
+        console.log(data.message);
+        return;
+      }
+      setshowUserListing(data);
+    } catch (error) {
+      console.log(error);
+      setlistingError(true);
+    }
+  };
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -187,17 +205,74 @@ const Profile = () => {
           onChange={handleChange}
         />
 
-        <button disabled={loading} className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">
-          {loading ? 'loading' : 'update'}
+        <button
+          disabled={loading}
+          className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"
+        >
+          {loading ? "loading" : "update"}
         </button>
-        <Link className="bg-green-700 text-white p-3 rounded-lg upppercase text-center hover:opacity:95" to={'/create-listing'}> Create Listing</Link>
+        <Link
+          className="bg-green-700 text-white p-3 rounded-lg upppercase text-center hover:opacity:95"
+          to={"/create-listing"}
+        >
+          {" "}
+          Create Listing
+        </Link>
       </form>
       <div className="flex justify-between mt-5">
-        <span onClick={handleDeleteUser} className="text-red-700 cursor-pointer">Delete Account</span>
-        <span onClick={handleSignOut} className="text-red-700 cursor-pointer">Sign out</span>
+        <span
+          onClick={handleDeleteUser}
+          className="text-red-700 cursor-pointer"
+        >
+          Delete Account
+        </span>
+        <span onClick={handleSignOut} className="text-red-700 cursor-pointer">
+          Sign out
+        </span>
       </div>
-      <p className="text-red-700 mt-4">{error? error: ''}</p>
-      <p className="text-green-700 mt-4">{updateSuccess? 'User is updated successfully!': ''}</p>
+      <p className="text-red-700 mt-4">{error ? error : ""}</p>
+      <p className="text-green-700 mt-4">
+        {updateSuccess ? "User is updated successfully!" : ""}
+      </p>
+      <button onClick={handleShowListing} className="text-green-700 w-full ">
+        {" "}
+        Show Listing
+      </button>
+
+      <p className="text-red-700 text-sm text-center">
+        {" "}
+        {listingError ? "An error occured!" : ""}
+      </p>
+      {showUserListing && showUserListing.length > 0 && (
+        <div className="flex flex-col gap-4">
+          <h1 className="text-center mt-7 font-semibold text-2xl">Your Listings</h1>
+          {showUserListing.map((listing) => (
+            <div
+              key={listing._id}
+              className="border rounded-lg p-3 flex justify-between items-center gap-4"
+            >
+              <Link to={`/listings/${listing._id}`}>
+                <img
+                  src={listing.imageURLs[0]}
+                  alt="listing image"
+                  className="h-16 w-16 object-contain "
+                />
+              </Link>
+
+              <Link
+                className="text-slate-700 font-semibold flex-1 hover:underline truncate "
+                to={`/listings/${listing._id}`}
+              >
+                <p>{listing.name}</p>
+              </Link>
+              <div className="flex flex-col items-center">
+                <button className="text-red-700 uppercase">Delete</button>
+                <button className="text-green-700 uppercase">Edit</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

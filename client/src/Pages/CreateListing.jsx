@@ -14,7 +14,7 @@ const CreateListing = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [files, setfiles] = useState([]);
   const [formData, setformData] = useState({
-    imageUrls: [],
+    imageURLs: [],
     name: "",
     description: "",
     address: "",
@@ -33,7 +33,7 @@ const CreateListing = () => {
   const [error, seterror] = useState(false);
   const [loading, setloading] = useState(false);
   const handleImageSubmit = (e) => {
-    if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
+    if (files.length > 0 && files.length + formData.imageURLs.length < 7) {
       setUploading(true);
       setimageUploadError(false);
       const promises = [];
@@ -44,7 +44,7 @@ const CreateListing = () => {
         .then((urls) => {
           setformData({
             ...formData,
-            imageUrls: formData.imageUrls.concat(urls),
+            imageURLs: formData.imageURLs.concat(urls),
           });
           setimageUploadError(false);
           setUploading(false);
@@ -87,7 +87,7 @@ const CreateListing = () => {
   const handleRemoveImage = (index) => {
     setformData({
       ...formData,
-      imageUrls: formData.imageUrls.filter((_, id) => id !== index),
+      imageURLs: formData.imageURLs.filter((_, id) => id !== index),
     });
   };
 
@@ -122,7 +122,7 @@ const CreateListing = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.imageUrls.length < 1)
+    if (formData.imageURLs.length < 1)
       return seterror("Please upload atleast one image");
     if (formData.regularPrice < formData.discountedPrice)
       return seterror("Discount price must be less than regular price");
@@ -142,7 +142,7 @@ const CreateListing = () => {
       if (data.success === false) {
         seterror(data.message);
       }
-      navigate(`/listing/${data._id}`)
+      navigate(`/listings/${data._id}`)
     } catch (error) {
       seterror(error.message);
       setloading(false);
@@ -331,7 +331,7 @@ const CreateListing = () => {
           <p className="text-sm text-red-700">
             {imageUploadError && imageUploadError}
           </p>
-          {formData.imageUrls.map((url, index) => (
+          {formData.imageURLs.map((url, index) => (
             <div
               key={index}
               className="flex justify-between p-3 border items-center"
