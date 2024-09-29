@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
 import { FaBath, FaBed, FaChair, FaMapMarkerAlt, FaParking, FaShare } from "react-icons/fa";
+import Contact from "../components/Contact";
 
 const Listing = () => {
   SwiperCore.use([Navigation]);
+  const {currentUser}= useSelector((state)=>state.user)
+  const [contact, setcontact] = useState(false)
   const [listing, setlisting] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, seterror] = useState(false);
@@ -126,6 +130,14 @@ const Listing = () => {
                   : `UnFurnished`}
               </li>
             </ul>
+            {
+              currentUser && currentUser._id !== listing.userRef && !contact && (
+                <button onClick={()=>setcontact(true)} className="bg-slate-700 uppercase p-2 rounded-lg text-white text-lg hover:opacity-95"> Contact Landlord</button>
+              )
+            }
+            {
+              contact && ( <Contact listing={listing}/>)
+            }
           </div>
         </div>
       )}
