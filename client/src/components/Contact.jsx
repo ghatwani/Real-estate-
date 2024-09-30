@@ -41,11 +41,13 @@ export default function Contact({ listing }) {
             placeholder="Enter Your Message..."
             className="w-full p-3 rounded-lg border"
           ></textarea>
-        <Link to={`mailto:${Landlord.email}?subject=Regarding ${listing.name}&body=${message}`} className="bg-slate-700 text-white text-center p-3 uppercase rounded-lg hover:opacity:95">
-        Send Message
-        </Link>
+          <Link
+            to={`mailto:${Landlord.email}?subject=Regarding ${listing.name}&body=${message}`}
+            className="bg-slate-700 text-white text-center p-3 uppercase rounded-lg hover:opacity:95"
+          >
+            Send Message
+          </Link>
         </div>
-
       )}
     </>
   );
