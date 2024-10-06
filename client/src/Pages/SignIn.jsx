@@ -27,13 +27,14 @@ const SignIn = () => {
     e.preventDefault();
     dispatch(signInStart());
     try {
-      const res = await fetch("/api/auth/signin",{
-        method:"POST",
+      const res = await fetch('/api/auth/signin', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify(formData),
       });
-      const data = res.data;
+      const data = await res.json();
       console.log(data);
 
       if (data.success === false) {
