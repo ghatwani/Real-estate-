@@ -27,7 +27,8 @@ const SignIn = () => {
     e.preventDefault();
     dispatch(signInStart());
     try {
-      const res = await axios.post("/api/auth/signin", formData,{
+      const res = await fetch("/api/auth/signin",{
+        method:"POST",
         headers: {
           "Content-Type": "application/json",
         },
