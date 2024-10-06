@@ -11,7 +11,7 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   signoutUserStart,
-  signInFaliure,
+  signInFailure,
   signoutUserFaliure,
   signoutUserSuccess,
 } from "../redux/user/userSlice";

@@ -33,8 +33,8 @@ console.log(searchTerm)
       <div className="flex justify-between items-center max-w-6xl mx-auto">
         <Link to="/">
           <h1 className="font-bold text-sm sm:text-xl flex flex-warp">
-            <span className="text-slate-500">Real</span>
-            <span className="text-slate-700">Estate</span>
+            <span className="text-slate-500">Ghar</span>
+            <span className="text-slate-700">Dekho</span>
           </h1>
         </Link>
         <form
