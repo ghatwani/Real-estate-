@@ -35,6 +35,7 @@ const Profile = () => {
   const [updateSuccess, setupdateSuccess] = useState(false);
   const [listingError, setlistingError] = useState(false);
   const [showUserListing, setshowUserListing] = useState([]);
+console.log("formData", formData);
 
   // console.log(filePerc)
   // console.log(fileUploadError)
@@ -58,14 +59,16 @@ const Profile = () => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setfilePerc(Math.round(progress));
+        console.log("progress", progress)
       },
       (error) => {
         setfileUploadError(true);
         // console.log(4)
-        // console.log(error)
+        console.log(error)
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
+          // {console.log(downloadURL)
           setformData({ ...formData, avatar: downloadURL })
         );
       }
